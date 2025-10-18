@@ -1,0 +1,6 @@
+resources:
+  - ../../base
+configMapGenerator:
+  - name: argocd-example
+    literals:
+      - OUTPUT="dev"
