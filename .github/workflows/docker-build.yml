@@ -43,22 +43,22 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/argocd-example:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/argocd-example:${{ env.BRANCH_NAME }}
 
-      - name: Install Kustomize
-        run: |
-          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-          sudo mv kustomize /usr/local/bin/
+      # - name: Install Kustomize
+      #   run: |
+      #     curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+      #     sudo mv kustomize /usr/local/bin/
 
-      - name: Update Kustomize image
-        run: |
-          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          kustomize edit set image $IMAGE_NAME=$IMAGE_NAME:$COMMIT_SHA
+      # - name: Update Kustomize image
+      #   run: |
+      #     COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+      #     kustomize edit set image $IMAGE_NAME=$IMAGE_NAME:$COMMIT_SHA
 
-      - name: Commit and push updated kustomization.yaml
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add kustomization.yaml
-          git commit -m "Update image tag to $COMMIT_SHA [skip ci]" || echo "No changes to commit"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Commit and push updated kustomization.yaml
+      #   run: |
+      #     git config user.name "github-actions"
+      #     git config user.email "actions@github.com"
+      #     git add kustomization.yaml
+      #     git commit -m "Update image tag to $COMMIT_SHA [skip ci]" || echo "No changes to commit"
+      #     git push origin main
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
