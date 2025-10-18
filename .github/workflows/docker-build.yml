@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - dev
+  workflow_run:
+    workflows: ["CI - Lint & Test"]
+    types:
+      - completed
 
 jobs:
   docker:
