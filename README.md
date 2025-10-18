@@ -1,1 +1,1 @@
-# argocd-apps
+# argocd-example
