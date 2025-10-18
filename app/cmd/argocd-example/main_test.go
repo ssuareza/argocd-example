@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -49,7 +49,7 @@ func TestHandler(t *testing.T) {
 				if output == "" {
 					output = "OUTPUT environment variable not set"
 				}
-				io.WriteString(w, "Hello from argocd-example! Reading variable from "+output+"\n")
+				fmt.Fprintf(w, "Hello from argocd-example! Reading variable from "+output+"\n")
 			})
 
 			handler.ServeHTTP(rr, req)
