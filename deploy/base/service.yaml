@@ -4,7 +4,7 @@ metadata:
   name: argocd-example
 spec:
   selector:
-    app: gargocd-example
+    app: argocd-example
   ports:
     - port: 8080
       targetPort: 8080

@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: argocd-example
+  labels:
+    app: argocd-example
 spec:
   replicas: 1
   selector:
@@ -13,8 +15,8 @@ spec:
         app: argocd-example
     spec:
       containers:
-        - name: gargocd-example
-          image: PENDING
+        - name: argocd-example
+          image: ssuareza/argocd-example:latest
           ports:
             - containerPort: 8080
           envFrom:
