@@ -8,13 +8,17 @@ on:
     branches:
       - "*"
 
+permissions:
+  contents: write # allows the workflow to push with GITHUB_TOKEN
+
 env:
   BRANCH_NAME: ${{ github.ref_name }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-  IMAGE_NAME: ssuareza/argocd-example
+  # IMAGE_NAME: ssuareza/argocd-example
+  IMAGE_NAME: ${{ github.repository }}
   SHA: ${{ github.sha }}
 
 jobs:
@@ -95,11 +99,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true # allows git push using GITHUB_TOKEN
 
       - name: Update deployment
         run: |
-          echo "${GIT_USERNAME}"
-          echo "${GIT_EMAIL}"
           git config user.name "${{ env.GIT_USERNAME }}"
           git config user.email "${{ env.GIT_EMAIL }}"
           git checkout ${{ env.BRANCH_NAME }}
