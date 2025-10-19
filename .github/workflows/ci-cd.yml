@@ -12,8 +12,8 @@ env:
   IMAGE_NAME: ssuareza/argocd-example
   BRANCH_NAME: ${{ github.ref_name }}
   SHA: ${{ github.sha }}
-  GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-  GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+  GIT_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+  GIT_EMAIL: ${{ secrets.GITHUB_EMAIL }}
 
 jobs:
   lint:
