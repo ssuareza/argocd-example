@@ -97,11 +97,12 @@ jobs:
           git fetch origin
           git checkout main
           git pull origin main
-          cd deploy/overlays/${ env.BRANCH_NAME }
+          pwd
+          cd deploy/overlays/${{ env.BRANCH_NAME }}
           # remove next 2 lines if works, is just debugging
           pwd 
           cat deployment.yaml
-          sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${TAG}|g" deployment.yaml
+          sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${{ github.sha }}|g" deployment.yaml
           cat deployment.yaml
           git add deployment.yaml
           git commit -m "Update image to ${{ github.sha }}"
