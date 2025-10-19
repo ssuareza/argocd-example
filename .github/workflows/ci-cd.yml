@@ -8,6 +8,9 @@ on:
     branches:
       - "*"
 
+env:
+  IMAGE_NAME: ssuareza/argocd-example
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -79,3 +82,27 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/argocd-example:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/argocd-example:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/argocd-example:${{ env.BRANCH_NAME }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update deployment
+        run: |
+          git config user.name "${{ secrets.GIT_USERNAME }}"
+          git config user.email "${{ secrets.GIT_EMAIL }}"
+          git fetch origin
+          git checkout main
+          git pull origin main
+          cd deploy/overlays/${ env.BRANCH_NAME }
+          # remove next 2 lines if works, is just debugging
+          pwd 
+          cat deployment.yaml
+          sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${TAG}|g" deployment.yaml
+          cat deployment.yaml
+          git add deployment.yaml
+          git commit -m "Update image to ${{ github.sha }}"
+          git push origin main
