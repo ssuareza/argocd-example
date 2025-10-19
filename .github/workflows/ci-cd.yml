@@ -9,13 +9,13 @@ on:
       - "*"
 
 env:
-  IMAGE_NAME: ssuareza/argocd-example
   BRANCH_NAME: ${{ github.ref_name }}
-  SHA: ${{ github.sha }}
-  GIT_USERNAME: ${{ secrets.GITHUB_USERNAME }}
-  GIT_EMAIL: ${{ secrets.GITHUB_EMAIL }}
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  GIT_EMAIL: ${{ secrets.GITHUB_EMAIL }}
+  GIT_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+  IMAGE_NAME: ssuareza/argocd-example
+  SHA: ${{ github.sha }}
 
 jobs:
   lint:
@@ -85,9 +85,9 @@ jobs:
           context: ./app
           push: true
           tags: |
-            ${{ env.DOCKERHUB_USERNAME }}/argocd-example:latest
-            ${{ env.DOCKERHUB_USERNAME }}/argocd-example:${{ env.SHA }}
-            ${{ env.DOCKERHUB_USERNAME }}/argocd-example:${{ env.BRANCH_NAME }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ env.SHA }}
+            ${{ env.IMAGE_NAME }}:${{ env.BRANCH_NAME }}
 
   deploy:
     needs: build-and-push
@@ -111,6 +111,7 @@ jobs:
           cat deployment.yaml
           sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${SHA}|g" deployment.yaml
           cat deployment.yaml
+
           git add deployment.yaml
           git commit -m "Update image to ${{ env.SHA }}"
           git push origin main
