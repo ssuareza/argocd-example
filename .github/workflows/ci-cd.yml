@@ -2,11 +2,7 @@ name: Pipeline with Argocd
 
 on:
   push:
-    branches:
-      - "*"
   pull_request:
-    branches:
-      - "*"
 
 permissions:
   contents: write # allows the workflow to git push
@@ -17,7 +13,6 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-  # IMAGE_NAME: ssuareza/argocd-example
   IMAGE_NAME: ${{ github.repository }}
   SHA: ${{ github.sha }}
 
