@@ -8,8 +8,8 @@ on:
     branches:
       - "*"
 
-# permissions:
-#   contents: write # allows the workflow to push with GITHUB_TOKEN
+permissions:
+  contents: write # allows the workflow to git push
 
 env:
   BRANCH_NAME: ${{ github.ref_name }}
@@ -24,6 +24,7 @@ env:
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,6 +47,7 @@ jobs:
   test:
     needs: lint
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,6 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     # only runs on dev and main
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -96,11 +99,14 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
+    # only runs on dev and main
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          persist-credentials: true # allows git push using GITHUB_TOKEN
+          persist-credentials: true # allows git push
 
       - name: Update deployment.yaml
         run: |
@@ -108,13 +114,8 @@ jobs:
           git config user.email "${{ env.GIT_EMAIL }}"
           git checkout ${{ env.BRANCH_NAME }}
           git pull origin ${{ env.BRANCH_NAME }}
-          pwd
           cd deploy/overlays/${{ env.BRANCH_NAME }}
-          # remove next 2 lines if works, is just debugging
-          pwd 
-          cat deployment.yaml
           sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${SHA}|g" deployment.yaml
-          cat deployment.yaml
           git add deployment.yaml
           git commit -m "Update image to ${{ env.SHA }}"
           git push origin main
