@@ -12,6 +12,8 @@ env:
   IMAGE_NAME: ssuareza/argocd-example
   BRANCH_NAME: ${{ github.ref_name }}
   SHA: ${{ github.sha }}
+  GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+  GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
 
 jobs:
   lint:
@@ -94,11 +96,12 @@ jobs:
 
       - name: Update deployment
         run: |
-          git config user.name "${{ secrets.GIT_USERNAME }}"
-          git config user.email "${{ secrets.GIT_EMAIL }}"
-          git fetch origin
-          git checkout main
-          git pull origin main
+          echo "${{ env.GIT_USERNAME }}"
+          echo "${{ env.GIT_EMAIL }}"
+          git config user.name "${{ env.GIT_USERNAME }}"
+          git config user.email "${{ env.GIT_EMAIL }}"
+          git checkout ${{ env.BRANCH_NAME }}
+          git pull origin ${{ env.BRANCH_NAME }}
           pwd
           cd deploy/overlays/${{ env.BRANCH_NAME }}
           # remove next 2 lines if works, is just debugging
@@ -107,5 +110,5 @@ jobs:
           sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${SHA}|g" deployment.yaml
           cat deployment.yaml
           git add deployment.yaml
-          git commit -m "Update image to ${SHA}"
+          git commit -m "Update image to ${{ env.SHA }}"
           git push origin main
