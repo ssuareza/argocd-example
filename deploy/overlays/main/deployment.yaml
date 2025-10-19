@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: argocd-example
-          image: ssuareza/argocd-example:eebfb617e8e46d91ba549c7bb9d144a680591bd7
+          image: ssuareza/argocd-example:5589bea94944ff6ff1dc01b8d787d9f8d070431f
