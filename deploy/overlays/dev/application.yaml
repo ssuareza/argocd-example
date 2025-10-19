@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-example-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/ssuareza/argocd-example.git"
+    targetRevision: dev
+    path: deploy/overlays/dev
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
