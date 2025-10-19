@@ -49,6 +49,8 @@ jobs:
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
+    # only runs on dev and main
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
