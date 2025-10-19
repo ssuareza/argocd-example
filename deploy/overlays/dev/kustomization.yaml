@@ -1,6 +1,6 @@
 resources:
   - ../../base
-configMapGenerator:
-  - name: argocd-example
-    literals:
-      - OUTPUT="dev"
+
+patchesStrategicMerge:
+  - config.yaml
+  - deployment.yaml
