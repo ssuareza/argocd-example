@@ -2,7 +2,8 @@
 
 This repository is just a example of how to use Argo CD.
 
-
+To learn more, follow this article:
+<https://asdfasdfas.com/article1>
 
 ## Structure
 
