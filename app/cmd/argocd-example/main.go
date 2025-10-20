@@ -9,11 +9,11 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		output := os.Getenv("OUTPUT")
-		if output == "" {
-			output = "OUTPUT environment variable not set"
+		env := os.Getenv("ENVIRONMENT")
+		if env == "" {
+			env = "ENVIRONMENT variable not set"
 		}
-		fmt.Fprintf(w, "Hello from argocd-example! Reading variable from %s\n", output)
+		fmt.Fprintf(w, "Hello from argocd-example! Reading variable from %s\n", env)
 	})
 
 	port := os.Getenv("PORT")
