@@ -87,7 +87,6 @@ jobs:
           context: ./app
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ env.SHA }}
             ${{ env.IMAGE_NAME }}:${{ env.BRANCH_NAME }}
 
@@ -113,4 +112,4 @@ jobs:
           sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${SHA}|g" deployment.yaml
           git add deployment.yaml
           git commit -m "Update image to ${{ env.SHA }}"
-          git push origin main
+          git push origin ${{ env.BRANCH_NAME }}

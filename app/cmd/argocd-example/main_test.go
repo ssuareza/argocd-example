@@ -16,16 +16,16 @@ func TestHandler(t *testing.T) {
 		expected string
 	}{
 		{
-			name:     "OUTPUT environment variable set",
-			envVar:   "OUTPUT",
+			name:     "ENVIRONMENT variable set",
+			envVar:   "ENVIRONMENT",
 			envValue: "test_value",
 			expected: "Hello from argocd-example! Reading variable from test_value\n",
 		},
 		{
-			name:     "OUTPUT environment variable not set",
-			envVar:   "OUTPUT",
+			name:     "ENVIRONMENT environment variable not set",
+			envVar:   "ENVIRONMENT",
 			envValue: "",
-			expected: "Hello from argocd-example! Reading variable from OUTPUT environment variable not set\n",
+			expected: "Hello from argocd-example! Reading variable from ENVIRONMENT variable not set\n",
 		},
 	}
 
@@ -45,11 +45,11 @@ func TestHandler(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				output := os.Getenv("OUTPUT")
-				if output == "" {
-					output = "OUTPUT environment variable not set"
+				env := os.Getenv("ENVIRONMENT")
+				if env == "" {
+					env = "ENVIRONMENT variable not set"
 				}
-				fmt.Fprintf(w, "Hello from argocd-example! Reading variable from "+output+"\n")
+				fmt.Fprintf(w, "Hello from argocd-example! Reading variable from "+env+"\n")
 			})
 
 			handler.ServeHTTP(rr, req)
